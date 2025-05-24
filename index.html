@@ -1,0 +1,227 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Photo Compressor</title>
+  <link href="https://unpkg.com/tailwindcss@3.4.1/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://unpkg.com/compressorjs@1.2.1/dist/compressor.min.js"></script>
+  <style>
+    .ad-placeholder {
+      background-color: #f3f4f6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #6b7280;
+      font-weight: bold;
+      border: 2px dashed #d1d5db;
+    }
+    #previewImage, #compressedImage {
+      max-width: 100%;
+      max-height: 200px;
+      object-fit: contain;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 font-sans">
+  <!-- Header -->
+  <header class="bg-blue-600 text-white p-4">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-2xl font-bold">Photo Compressor</h1>
+      <nav>
+        <a href="#" class="px-4 hover:underline">Home</a>
+        <a href="#" class="px-4 hover:underline">About</a>
+        <a href="#" class="px-4 hover:underline">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="container mx-auto flex flex-col md:flex-row gap-6 py-8">
+    <!-- Left Sidebar Ad -->
+    <aside class="md:w-1/4">
+      <div class="ad-placeholder h-96 w-full mb-6">
+        <p>Ad Space (300x600)</p>
+      </div>
+    </aside>
+
+    <!-- Main Compression Section -->
+    <main class="md:w-2/4 bg-white p-6 rounded-lg shadow-md">
+      <h2 class="text-xl font-semibold mb-4">Compress Your Photos</h2>
+      <p class="mb-4">Upload your photos to reduce their file size without losing quality.</p>
+      <div class="mb-4">
+        <button id="choosePictureBtn" class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 mb-2">Choose Picture</button>
+        <input type="file" id="photoInput" accept="image/*" class="hidden">
+      </div>
+      <div class="mb-4">
+        <label for="qualitySlider" class="block text-sm font-medium text-gray-700">Compression Quality: <span id="qualityValue">50</span>%</label>
+        <input type="range" id="qualitySlider" min="0" max="100" value="50" class="w-full">
+      </div>
+      <button id="compressBtn" class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">Compress Photo</button>
+      <div id="output" class="mt-4 hidden">
+        <p class="mb-2">Original Size: <span id="originalSizeMB">0</span> MB (<span id="originalSizeKB">0</span> KB)</p>
+        <p class="mb-2">Compressed Size: <span id="compressedSizeMB">0</span> MB (<span id="compressedSizeKB">0</span> KB)</p>
+        <p class="mb-2">Original Preview:</p>
+        <img id="previewImage" src="" alt="Original Preview" class="mb-4">
+        <p class="mb-2">Compressed Preview:</p>
+        <img id="compressedImage" src="" alt="Compressed Preview" class="mb-4">
+        <button id="downloadBtn" class="text-blue-600 underline focus:outline-none">Download Compressed Photo</button>
+      </div>
+    </main>
+
+    <!-- Right Sidebar Ad -->
+    <aside class="md:w-1/4">
+      <div class="ad-placeholder h-96 w-full mb-6">
+        <p>Ad Space (300x600)</p>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Banner Ad -->
+  <div class="container mx-auto py-6">
+    <div class="ad-placeholder h-24 w-full">
+      <p>Banner Ad Space (728x90)</p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white p-4 mt-8">
+    <div class="container mx-auto text-center">
+      <p>© 2025 Photo Compressor. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Initialize elements
+    const choosePictureBtn = document.getElementById('choosePictureBtn');
+    const photoInput = document.getElementById('photoInput');
+    const compressBtn = document.getElementById('compressBtn');
+    const qualitySlider = document.getElementById('qualitySlider');
+    const qualityValue = document.getElementById('qualityValue');
+    const output = document.getElementById('output');
+    const originalSizeMB = document.getElementById('originalSizeMB');
+    const originalSizeKB = document.getElementById('originalSizeKB');
+    const compressedSizeMB = document.getElementById('compressedSizeMB');
+    const compressedSizeKB = document.getElementById('compressedSizeKB');
+    const previewImage = document.getElementById('previewImage');
+    const compressedImage = document.getElementById('compressedImage');
+    const downloadBtn = document.getElementById('downloadBtn');
+
+    let compressedFile = null; // Store compressed file for download
+
+    // Update quality value display
+    qualitySlider.addEventListener('input', () => {
+      qualityValue.textContent = qualitySlider.value;
+    });
+
+    // Trigger file input click
+    choosePictureBtn.addEventListener('click', () => {
+      photoInput.click();
+    });
+
+    // Handle file selection and preview
+    photoInput.addEventListener('change', () => {
+      if (photoInput.files.length > 0) {
+        const file = photoInput.files[0];
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          previewImage.src = e.target.result;
+          output.classList.remove('hidden');
+          originalSizeMB.textContent = (file.size / (1024 * 1024)).toFixed(2);
+          originalSizeKB.textContent = (file.size / 1024).toFixed(2);
+          compressedImage.src = ''; // Reset compressed preview
+          compressedSizeMB.textContent = '0';
+          compressedSizeKB.textContent = '0';
+          compressedFile = null; // Reset compressed file
+        };
+        reader.readAsDataURL(file);
+      } else {
+        output.classList.add('hidden');
+      }
+    });
+
+    // Handle compression
+    compressBtn.addEventListener('click', () => {
+      if (photoInput.files.length > 0) {
+        const file = photoInput.files[0];
+        const quality = qualitySlider.value / 100;
+
+        new Compressor(file, {
+          quality: quality,
+          mimeType: file.type,
+          success(result) {
+            // Store compressed file
+            compressedFile = result;
+            // Update compressed size
+            compressedSizeMB.textContent = (result.size / (1024 * 1024)).toFixed(2);
+            compressedSizeKB.textContent = (result.size / 1024).toFixed(2);
+            // Set compressed image preview
+            compressedImage.src = URL.createObjectURL(result);
+          },
+          error(err) {
+            console.error('Compression error:', err.message);
+            alert('Error compressing photo: ' + err.message);
+          }
+        });
+      } else {
+        alert('Please select a photo to compress.');
+      }
+    });
+
+    // Handle download
+    downloadBtn.addEventListener('click', () => {
+      if (compressedFile) {
+        const url = URL.createObjectURL(compressedFile);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `compressed_${photoInput.files[0].name}`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url); // Clean up to prevent memory leak
+      } else {
+        alert('No compressed photo available. Please compress a photo first.');
+      }
+    });
+  </script>
+</body>
+</html>
