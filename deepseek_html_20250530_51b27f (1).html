@@ -547,3 +547,60 @@ function resetUploadDisplay() {
 
 // Add this to your compressImage function after showing results:
 // Add a "Compress Another" button that calls resetUploadDisplay()
+<!-- Top Ad (below upload box) -->
+<div class="ad-container" id="ad-top">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_PUBLISHER_ID"></script>
+  <!-- QuickShrink Top Banner -->
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-YOUR_PUBLISHER_ID"
+       data-ad-slot="YOUR_AD_SLOT_TOP"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+
+<!-- Results Page Ad (above footer) -->
+<div class="ad-container" id="ad-results">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_PUBLISHER_ID"></script>
+  <!-- QuickShrink Results Banner -->
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-YOUR_PUBLISHER_ID"
+       data-ad-slot="YOUR_AD_SLOT_RESULTS"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+.ad-container {
+  margin: 2rem auto;
+  padding: 1rem;
+  background: white;
+  border-radius: 8px;
+  text-align: center;
+  max-width: 1200px;
+}
+
+#ad-top {
+  margin: 1rem auto 2rem;
+}
+
+#ad-results {
+  margin: 3rem auto 1rem;
+}
+// Load ads only when needed
+function loadAds() {
+  // Load top ad immediately
+  (adsbygoogle = window.adsbygoogle || []).push({});
+  
+  // Load results ad only when compression is done
+  document.getElementById('compressBtn').addEventListener('click', function() {
+    setTimeout(() => {
+      (adsbygoogle = window.adsbygoogle || []).push({});
+      document.getElementById('ad-results').scrollIntoView({ behavior: 'smooth' });
+    }, 1500);
+  });
+}
+
+// Call this on page load
+window.addEventListener('DOMContentLoaded', loadAds);
