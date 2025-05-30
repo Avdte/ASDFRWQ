@@ -508,3 +508,42 @@
     <footer style="background: white; border-top: 1px solid #eee;">
         <p style="color: #666;">© 2024 QuickShrink. All rights reserved.</p>
     </footer>
+<!-- Replace your existing upload-area div with this: -->
+<div class="upload-area" id="dropZone">
+    <p id="uploadText">Drag & drop your images here or <u>click to browse</u></p>
+    <p id="fileNameDisplay" style="display: none; margin-top: 10px; font-weight: 500;"></p>
+    <input type="file" id="fileInput" accept="image/jpeg, image/png, image/webp">
+</div>
+// Update file input handler to show selected filename
+fileInput.addEventListener('change', () => {
+    if (fileInput.files.length > 0) {
+        const fileName = fileInput.files[0].name;
+        document.getElementById('uploadText').textContent = "Ready to compress!";
+        const fileNameDisplay = document.getElementById('fileNameDisplay');
+        fileNameDisplay.textContent = `Selected: ${fileName}`;
+        fileNameDisplay.style.display = 'block';
+    }
+    handleFiles(fileInput.files);
+});
+
+// Update drag and drop handler to also show filename
+function handleDrop(e) {
+    const dt = e.dataTransfer;
+    const files = dt.files;
+    if (files.length > 0) {
+        document.getElementById('uploadText').textContent = "Ready to compress!";
+        const fileNameDisplay = document.getElementById('fileNameDisplay');
+        fileNameDisplay.textContent = `Selected: ${files[0].name}`;
+        fileNameDisplay.style.display = 'block';
+    }
+    handleFiles(files);
+}
+
+// Reset display when compressing another image
+function resetUploadDisplay() {
+    document.getElementById('uploadText').textContent = "Drag & drop your images here or <u>click to browse</u>";
+    document.getElementById('fileNameDisplay').style.display = 'none';
+}
+
+// Add this to your compressImage function after showing results:
+// Add a "Compress Another" button that calls resetUploadDisplay()
