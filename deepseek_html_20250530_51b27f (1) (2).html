@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Primary Meta Tags -->
+    <title>QuickShrink - Free Online Image Compressor | Reduce Photo Size Instantly</title>
+    <meta name="description" content="Compress JPG, PNG, WebP images in seconds. Free tool to reduce image size without quality loss. No registration required.">
+    <meta name="keywords" content="compress image, reduce photo size, free image optimizer, JPG compressor, PNG compressor">
+    
+    <!-- Open Graph / Facebook / Twitter Meta Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://quickshrink.com/">
+    <meta property="og:title" content="QuickShrink - Free Online Image Compressor">
+    <meta property="og:description" content="Compress images instantly without losing quality. Supports JPG, PNG, WebP.">
+    <meta property="og:image" content="https://quickshrink.com/preview.jpg">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon.png">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Usage Instructions and About Section -->
+<div class="footer-text" style="max-width: 800px; margin: 3rem auto 0; padding: 2rem 5%; text-align: center; color: #666; line-height: 1.6; background: white;">
+    <h3 style="font-family: 'Poppins', sans-serif; margin-bottom: 1rem; color: #444;">How to Use QuickShrink</h3>
+    <ol style="text-align: left; max-width: 600px; margin: 0 auto 2rem auto; padding-left: 1.2rem;">
+        <li style="margin-bottom: 1rem;"><strong>Step 1:</strong> Click on the upload area or drag & drop your image (JPG, PNG, WebP).</li>
+        <li style="margin-bottom: 1rem;"><strong>Step 2:</strong> Adjust the compression quality using the slider. 80% is recommended for good balance.</li>
+        <li style="margin-bottom: 1rem;"><strong>Step 3:</strong> Click “Compress Now” to process the image.</li>
+        <li style="margin-bottom: 1rem;"><strong>Step 4:</strong> Scroll down to see a preview of the original and compressed images.</li>
+        <li style="margin-bottom: 1rem;"><strong>Step 5:</strong> Click “Download Compressed Image” to save it to your device.</li>
+    </ol>
+
+    <h3 style="font-family: 'Poppins', sans-serif; margin-bottom: 1rem; color: #444;">About This Website</h3>
+    <p style="margin-bottom: 1.5rem;">
+        QuickShrink is a free, simple, and fast image compression tool. You don’t need to sign up or install anything. 
+        It works directly in your browser and supports all popular image formats. Whether you want to upload lighter images 
+        to your website, share smaller files on social media, or save space on your phone or PC — QuickShrink makes it easy. 
+        <strong style="color: #333;">Safe, user-friendly, and always free.</strong>
+    </p>
+</div>
+
+    <!-- Styles -->
+    <style>
+        :root {
+            --primary: #3A86FF;
+            --primary-dark: #2667CC;
+            --background: #FFFFFF;
+            --background-alt: #F8F9FA;
+            --text: #212529;
+            --text-light: #6C757D;
+            --border: #DEE2E6;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .logo {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--primary);
+        }
+        
+        nav {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        
+        nav a:hover {
+            color: var(--primary);
+        }
+        
+        .auth-buttons button {
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .login {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+        
+        .login:hover {
+            border-color: var(--primary);
+        }
+        
+        main {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 5%;
+        }
+        
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .hero h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .hero p.subtitle {
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+        
+        .upload-area {
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 3rem 2rem;
+            margin: 2rem 0;
+            cursor: pointer;
+            transition: all 0.3s;
+            background-color: var(--background-alt);
+        }
+        
+        .upload-area:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow);
+        }
+        
+        .upload-area p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+        }
+        
+        .upload-area p u {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        #fileInput {
+            display: none;
+        }
+        
+        .compression-options {
+            margin: 2rem 0;
+        }
+        
+        .compression-options label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .quality-slider {
+            width: 100%;
+            margin-bottom: 1.5rem;
+        }
+        
+        .compress-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            font-size: 1.1rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .compress-btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .results {
+            display: none;
+            margin-top: 3rem;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .comparison {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .original, .compressed {
+            flex: 1;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            background-color: var(--background-alt);
+        }
+        
+        .comparison h3 {
+            margin-bottom: 1rem;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .comparison img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+        
+        .download-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            font-size: 1.1rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .download-btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .ad-banner {
+            margin: 2rem 0;
+            padding: 1rem;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-light);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @media (max-width: 768px) {
+            .comparison {
+                flex-direction: column;
+            }
+            
+            header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            nav {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">QuickShrink</div>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/tools">Tools</a>
+            <a href="/blog">Blog</a>
+            <a href="/faq">FAQ</a>
+            <a href="/about">About</a>
+        </nav>
+        <div class="auth-buttons">
+            <button class="login">Login</button>
+        </div>
+    </header>
+    
+    <main>
+        <section class="hero">
+            <h1>Compress Your Images in Seconds</h1>
+            <p class="subtitle">Reduce file size without losing quality. Supports JPG, PNG, WebP, and more.</p>
+            
+            <div class="upload-area" id="dropZone">
+                <p>Drag & drop your images here or <u>click to browse</u></p>
+                <input type="file" id="fileInput" accept="image/jpeg, image/png, image/webp">
+            </div>
+            
+            <div class="compression-options">
+                <label for="qualitySlider">Compression Quality: <span id="qualityValue">80</span>%</label>
+                <input type="range" id="qualitySlider" class="quality-slider" min="10" max="100" value="80">
+                <button class="compress-btn" id="compressBtn">Compress Now</button>
+            </div>
+            
+            <div class="ad-banner">
+                <!-- Google AdSense Placeholder -->
+                <div style="height: 90px; background: #eee; display: flex; align-items: center; justify-content: center;">
+                    <p>Advertisement</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="results" id="resultsSection">
+            <div class="comparison">
+                <div class="original">
+                    <h3>Original (<span id="originalSize">0</span> KB)</h3>
+                    <img id="originalImg" src="" alt="Original image preview">
+                </div>
+                <div class="compressed">
+                    <h3>Compressed (<span id="compressedSize">0</span> KB)</h3>
+                    <img id="compressedImg" src="" alt="Compressed image preview">
+                </div>
+            </div>
+            <button class="download-btn" id="downloadBtn">Download Compressed Image</button>
+        </section>
+    </main>
+    
+    <footer>
+        <p>© 2024 QuickShrink. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // DOM Elements
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const qualitySlider = document.getElementById('qualitySlider');
+        const qualityValue = document.getElementById('qualityValue');
+        const compressBtn = document.getElementById('compressBtn');
+        const resultsSection = document.getElementById('resultsSection');
+        const originalImg = document.getElementById('originalImg');
+        const compressedImg = document.getElementById('compressedImg');
+        const originalSize = document.getElementById('originalSize');
+        const compressedSize = document.getElementById('compressedSize');
+        const downloadBtn = document.getElementById('downloadBtn');
+        
+        // Update quality percentage display
+        qualitySlider.addEventListener('input', () => {
+            qualityValue.textContent = qualitySlider.value;
+        });
+        
+        // Handle file selection via click
+        dropZone.addEventListener('click', () => {
+            fileInput.click();
+        });
+        
+        // Handle drag and drop
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+        });
+        
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, highlight, false);
+        });
+        
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, unhighlight, false);
+        });
+        
+        function highlight() {
+            dropZone.style.borderColor = '#3A86FF';
+            dropZone.style.backgroundColor = '#F0F7FF';
+        }
+        
+        function unhighlight() {
+            dropZone.style.borderColor = '#DEE2E6';
+            dropZone.style.backgroundColor = '#F8F9FA';
+        }
+        
+        // Handle dropped files
+        dropZone.addEventListener('drop', handleDrop, false);
+        
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            handleFiles(files);
+        }
+        
+        // Handle selected files
+        fileInput.addEventListener('change', () => {
+            handleFiles(fileInput.files);
+        });
+        
+        // Process files
+        function handleFiles(files) {
+            if (!files.length) return;
+            
+            const file = files[0];
+            if (!file.type.match('image.*')) {
+                alert('Please select an image file (JPG, PNG, WebP)');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                originalImg.src = e.target.result;
+                
+                // Show original file size
+                originalSize.textContent = Math.round(file.size / 1024);
+                
+                // Enable compress button
+                compressBtn.disabled = false;
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        // Compress image
+        compressBtn.addEventListener('click', compressImage);
+        
+        function compressImage() {
+            if (!originalImg.src) {
+                alert('Please select an image first');
+                return;
+            }
+            
+            const quality = qualitySlider.value / 100;
+            const img = new Image();
+            img.src = originalImg.src;
+            
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                // Calculate new dimensions (optional: maintain aspect ratio)
+                const MAX_WIDTH = 1500;
+                const MAX_HEIGHT = 1500;
+                let width = img.width;
+                let height = img.height;
+                
+                if (width > height) {
+                    if (width > MAX_WIDTH) {
+                        height *= MAX_WIDTH / width;
+                        width = MAX_WIDTH;
+                    }
+                } else {
+                    if (height > MAX_HEIGHT) {
+                        width *= MAX_HEIGHT / height;
+                        height = MAX_HEIGHT;
+                    }
+                }
+                
+                canvas.width = width;
+                canvas.height = height;
+                ctx.drawImage(img, 0, 0, width, height);
+                
+                // Convert to Blob and display
+                canvas.toBlob(function(blob) {
+                    const compressedUrl = URL.createObjectURL(blob);
+                    compressedImg.src = compressedUrl;
+                    compressedSize.textContent = Math.round(blob.size / 1024);
+                    
+                    // Show results section
+                    resultsSection.style.display = 'block';
+                    
+                    // Set up download
+                    downloadBtn.onclick = function() {
+                        const a = document.createElement('a');
+                        a.href = compressedUrl;
+                        a.download = 'compressed_' + fileInput.files[0].name;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                    };
+                    
+                    // Scroll to results
+                    resultsSection.scrollIntoView({ behavior: 'smooth' });
+                }, 'image/jpeg', quality);
+            };
+        }
+    </script>
+</body>
+</html>
+<!-- Add this just before the footer section in your existing index.html -->
+
+        <!-- Additional Ad Space -->
+        <div class="ad-banner" style="margin: 3rem auto 0; background: white; padding: 1rem 0;">
+            <!-- Google AdSense Placeholder -->
+            <div style="height: 90px; background: #f5f5f5; display: flex; align-items: center; justify-content: center; max-width: 900px; margin: 0 auto;">
+                <p>Advertisement</p>
+            </div>
+        </div>
+
+        <!-- Footer Text Section -->
+        <div class="footer-text" style="max-width: 800px; margin: 0 auto; padding: 2rem 5%; text-align: center; color: #666; line-height: 1.6; background: white;">
+            <h3 style="font-family: 'Poppins', sans-serif; margin-bottom: 1rem; color: #444;">QuickShrink – Free Online Photo Compressor</h3>
+            <p style="margin-bottom: 1.5rem;">
+                QuickShrink is a fast, easy-to-use online tool that compresses JPG, PNG, and WebP images without losing quality. 
+                Just upload your photo, adjust the quality, and download a smaller, optimized version in seconds. 
+                Perfect for web use, social media, and saving storage space. 
+                <strong style="color: #333;">100% free, secure, and mobile-friendly.</strong> 
+                Ads support our service so you can compress images without limits.
+            </p>
+        </div>
+
+    </main>
+    
+    <footer style="background: white; border-top: 1px solid #eee;">
+        <p style="color: #666;">© 2024 QuickShrink. All rights reserved.</p>
+    </footer>
